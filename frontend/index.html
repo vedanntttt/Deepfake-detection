@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deepfake Detector AI</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="background-glass"></div>
+    
+    <main class="container">
+        <header>
+            <h1>DeepAI Authenticator</h1>
+            <p>Detection power by local Transformer models.</p>
+        </header>
+
+        <nav class="tabs">
+            <button class="tab-btn active" id="tab-image">Image Detector</button>
+            <button class="tab-btn" id="tab-audio">Audio Detector</button>
+        </nav>
+
+        <section class="upload-zone" id="upload-zone">
+            <div class="upload-content">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" class="upload-icon">
+                    <path d="M12 4L12 16M12 4L8 8M12 4L16 8M4 20L20 20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <p class="upload-text">Drag & Drop your image here</p>
+                <p class="upload-subtext">or click to browse</p>
+                <p class="upload-subtext small">(Supported: JPG, PNG, JPEG)</p>
+            </div>
+            <input type="file" id="file-input" accept="image/png, image/jpeg, image/jpg" hidden>
+        </section>
+
+        <section class="preview-section hidden" id="preview-section">
+            <div class="image-preview-container">
+                <img id="image-preview" src="" alt="Image Preview">
+                <audio id="audio-preview" controls class="hidden"></audio>
+                <div class="scanning-overlay hidden" id="scanning-overlay">
+                    <div class="scanner-line"></div>
+                    <p>Analyzing pixels...</p>
+                </div>
+            </div>
+            
+            <div class="results hidden" id="results">
+                <h2>Analysis Results</h2>
+                
+                <div class="confidence-bar-container">
+                    <div class="confidence-label">
+                        <span>Real</span>
+                        <span id="real-score">0%</span>
+                    </div>
+                    <div class="progress-bg">
+                        <div class="progress-fill real-fill" id="real-progress"></div>
+                    </div>
+                </div>
+
+                <div class="confidence-bar-container">
+                    <div class="confidence-label">
+                        <span>AI Generated (Deepfake)</span>
+                        <span id="fake-score">0%</span>
+                    </div>
+                    <div class="progress-bg">
+                        <div class="progress-fill fake-fill" id="fake-progress"></div>
+                    </div>
+                </div>
+
+                <button class="reset-btn" id="reset-btn">Analyze Another Image</button>
+            </div>
+        </section>
+        
+        <section class="history-section" id="history-section">
+            <h3>Recent Scans</h3>
+            <div class="history-grid" id="history-grid">
+                <!-- History items will be inserted here dynamically -->
+            </div>
+            <button class="clear-history-btn" id="clear-history-btn" style="display: none;">Clear History</button>
+        </section>
+
+        <div class="error-toast hidden" id="error-toast">
+            <span id="error-message">An error occurred.</span>
+        </div>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>

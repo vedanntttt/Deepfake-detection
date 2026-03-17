@@ -1,0 +1,22 @@
+﻿Loading model...
+Model loaded!
+
+--- Test 1: Windows system sound (tada.wav) ---
+  Duration: 1.62s, Samples: 25868
+  Result: [{'score': 0.9999755620956421, 'label': 'fake'}, {'score': 2.4476956241414882e-05, 'label': 'real'}]
+
+--- Test 2: Pure synthetic sine wave (2s) ---
+  Duration: 2.00s
+  Result: [{'score': 0.9965775609016418, 'label': 'fake'}, {'score': 0.003422372043132782, 'label': 'real'}]
+
+--- Test 3: White noise (2s) ---
+  Result: [{'score': 0.913467526435852, 'label': 'real'}, {'score': 0.08653247356414795, 'label': 'fake'}]
+
+--- Test 4: Silence (2s) ---
+  Result: [{'score': 0.9990966320037842, 'label': 'real'}, {'score': 0.0009033883106894791, 'label': 'fake'}]
+
+--- Model Config ---
+  id2label: {0: 'fake', 1: 'real'}
+  label2id: {'fake': '0', 'real': '1'}
+
+Done!
