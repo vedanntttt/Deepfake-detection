@@ -1,0 +1,9 @@
+fastapi
+uvicorn[standard]
+transformers
+torch
+Pillow
+librosa
+numpy
+imageio-ffmpeg
+python-multipart
