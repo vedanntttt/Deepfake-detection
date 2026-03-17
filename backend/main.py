@@ -24,10 +24,25 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-print("Loading models... This might take a moment.")
-image_pipeline = pipeline("image-classification", model="dima806/deepfake_vs_real_image_detection")
-audio_pipeline = pipeline("audio-classification", model="MelodyMachine/Deepfake-audio-detection-V2")
-print("All models loaded successfully!")
+# Lazy-load models so the server can bind to the port immediately (required for Render)
+image_pipeline = None
+audio_pipeline = None
+
+def get_image_pipeline():
+    global image_pipeline
+    if image_pipeline is None:
+        print("Loading image model... This might take a moment.")
+        image_pipeline = pipeline("image-classification", model="dima806/deepfake_vs_real_image_detection")
+        print("Image model loaded successfully!")
+    return image_pipeline
+
+def get_audio_pipeline():
+    global audio_pipeline
+    if audio_pipeline is None:
+        print("Loading audio model... This might take a moment.")
+        audio_pipeline = pipeline("audio-classification", model="MelodyMachine/Deepfake-audio-detection-V2")
+        print("Audio model loaded successfully!")
+    return audio_pipeline
 
 
 def parse_scores(results, mode="image"):
@@ -59,7 +74,7 @@ async def detect_image(file: UploadFile = File(...)):
     try:
         contents = await file.read()
         image = Image.open(io.BytesIO(contents)).convert("RGB")
-        results = image_pipeline(image)
+        results = get_image_pipeline()(image)
         real_conf, fake_conf = parse_scores(results)
         return JSONResponse(content={"real_confidence": real_conf, "fake_confidence": fake_conf})
     except Exception as e:
@@ -101,7 +116,7 @@ async def detect_audio(file: UploadFile = File(...)):
         print(f"[DEBUG] Audio loaded: {len(audio_array)} samples at {sample_rate}Hz")
 
         # Pass raw numpy array + sample rate to the pipeline
-        results = audio_pipeline({"raw": audio_array, "sampling_rate": sample_rate})
+        results = get_audio_pipeline()({"raw": audio_array, "sampling_rate": sample_rate})
 
         real_conf, fake_conf = parse_scores(results, mode="audio")
         return JSONResponse(content={"real_confidence": real_conf, "fake_confidence": fake_conf})
